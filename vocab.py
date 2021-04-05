@@ -27,7 +27,8 @@ def get_phrase_matches(sample, keywords):
         matches += 1
         string_id = nlp.vocab.strings[match_id]  
         span = sample[start:end]                   
-        print(match_id, string_id, start, end, span.text)
+        # print(match_id, string_id, start, end, span.text)
+        print("Start Index:", start, "End Index:", end, "Word Matched:", span.text)
 
     print("Number of Matches: ")
     print(matches)
@@ -93,7 +94,7 @@ print(transitions)
 
 # get_phrase_matches(doc, vocab)
 
-get_phrase_matches(student_sample, cercawords)
+get_phrase_matches(essay_doc, transitions)
 
 #["bolster", "bristle", capacity, comfort zone, competent, advocacy, alleviate, altruism: sacrificing self-interest in the interest of others, angst, condescending, detox, involved, lofty, reap, self-esteem, susceptible, tendencies, turbulent]
 
