@@ -9,7 +9,6 @@ def get_phrase_matches(sample, keywords):
     m_tool = Matcher(nlp.vocab)
     matches = 0
 
-
     vocab = []
 
     for phrase in keywords:
@@ -34,6 +33,112 @@ def get_phrase_matches(sample, keywords):
     print(matches)
 
 
+def get_transition_matches(sample):
+    explanation_transitions = ["Thus", "for example", "for instance", "namely", "to illustrate", "in other words", "in particular",
+    "specifically", "such as", "for example", "for instance", "as an illustration"]
+
+    contrast_transitions = ["On the contrary", "contrarily", "notwithstanding", "but", "however", "nevertheless", "in spite of",
+                        "in contrast", "yet", "on one hand", "on the other hand", "rather", "or", "nor", "conversely", "at the same time", 
+                        "while this may be true"]
+    
+    summary_transitions = [
+    "as can be seen", "generally speaking", "in the final analysis", 
+    "all things considered", "as shown above", "in the long run", "given these points", 
+    "as has been noted", "in a word", "for the most part", "after all", "in fact", 
+    "in summary", "in conclusion", "in short", "in brief", "in essence", 
+    "to summarize", "on balance", "altogether", "overall", "ordinarily", "usually", 
+    "by and large", "to sum up", "on the whole", "in any event", "in either case", "all in all", "ultimately"]
+
+
+    # Explanation matches segment
+    m_tool = Matcher(nlp.vocab)
+    num_ematches = 0
+
+    vocab = []
+
+    for phrase in explanation_transitions:
+        pattern = []
+        phrase = phrase.split()
+        for word in phrase:
+            pattern.append({"LOWER" : word})
+        vocab.append(pattern)
+
+    m_tool.add("MATCH", vocab)
+
+    explanation_matches = m_tool(sample)
+
+    for match_id, start, end in explanation_matches:
+        num_ematches += 1
+        string_id = nlp.vocab.strings[match_id]  
+        span = sample[start:end]                   
+        # print(match_id, string_id, start, end, span.text)
+        print("Start Index:", start, "End Index:", end, "Word Matched:", span.text)
+
+    print("Number of Explanation Transition Matches: ")
+    print(num_ematches)
+
+
+    # Contrast matches segment 
+    vocab = []
+
+    num_cmatches = 0
+
+    c_tool = Matcher(nlp.vocab)
+
+    for phrase in contrast_transitions:
+        pattern = []
+        phrase = phrase.split()
+        for word in phrase:
+            pattern.append({"LOWER" : word})
+        vocab.append(pattern)
+
+    c_tool.add("MATCH", vocab)
+
+    contrast_matches = c_tool(sample)
+
+    for match_id, start, end in contrast_matches:
+        num_cmatches += 1
+        string_id = nlp.vocab.strings[match_id]  
+        span = sample[start:end]                   
+        # print(match_id, string_id, start, end, span.text)
+        print("Start Index:", start, "End Index:", end, "Word Matched:", span.text)
+
+    print("Number of Contrast Transition Matches: ")
+    print(num_cmatches)
+
+
+    # Summary matches segment
+
+    vocab = []
+
+    num_smatches = 0
+
+    s_tool = Matcher(nlp.vocab)
+
+    for phrase in summary_transitions:
+        pattern = []
+        phrase = phrase.split()
+        for word in phrase:
+            pattern.append({"LOWER" : word})
+        vocab.append(pattern)
+
+    s_tool.add("MATCH", vocab)
+
+    summary_matches = s_tool(sample)
+
+    for match_id, start, end in summary_matches:
+        num_smatches += 1
+        string_id = nlp.vocab.strings[match_id]  
+        span = sample[start:end]                   
+        # print(match_id, string_id, start, end, span.text)
+        print("Start Index:", start, "End Index:", end, "Word Matched:", span.text)
+
+    print("Number of Summary Transition Matches: ")
+    print(num_smatches)
+
+
+
+
 
 
 
@@ -55,12 +160,12 @@ essay_doc = nlp(essay_text)
 
 doc = nlp(text)
 
-for word in essay_doc:
-    print(word)
+#for word in essay_doc:
+    #print(word)
 
 
-print("Writing sample: ")
-print(essay_text)
+#print("Writing sample: ")
+#print(essay_text)
 
 
 # tok = ld.tokenize(text)
@@ -72,7 +177,6 @@ print(essay_text)
 #         res.append(i) 
 
 
-patterns = [[{"TEXT": "state"}], [{"TEXT": "ruddy"}], [{"TEXT": "silt"}], [{"TEXT": "aggregate"}]]
 
 vocab = ["state", "ruddy", "silt", "aggregate", "colorado"]
 
@@ -89,12 +193,16 @@ transitions = ["Thus", "for example", "for instance", "namely", "to illustrate",
 cercawords = ["inhabitants", "surplus", "downfall", "supernatural", "crops", "clothed", "chiefly", "commoners", "landfalls", "bountiful", "fasting", "friar", "dignified", "conquerors", "patrons", "loincloths", "semidivine", "palm-thatched", "bore", "manner", "copper-alloyed", "scarecrows", "root crops", "inland", "manioc", "dominate", "yuca", "arranged marriages", "friars", "devastating", "prophecies", "mounds", "customs", "prophecy", "indebted", "rafters", "staple", "bitter", "yielded", "lord", "foretold", "noble", "interact", "Hieronymite", "subjects", "theft", "disputes", "gourd"]
 
 
-print("Transition words: ")
-print(transitions)
+#print("Transition words: ")
+#print(transitions)
 
 # get_phrase_matches(doc, vocab)
 
-get_phrase_matches(essay_doc, transitions)
+# get_phrase_matches(essay_doc, transitions)
+
+get_transition_matches(essay_doc)
+
+
 
 #["bolster", "bristle", capacity, comfort zone, competent, advocacy, alleviate, altruism: sacrificing self-interest in the interest of others, angst, condescending, detox, involved, lofty, reap, self-esteem, susceptible, tendencies, turbulent]
 
